@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from Uklad import Uklad
+from Kulka import Kulka
+
 class Potencjal:
     def calc_energy():
         pass
@@ -16,5 +19,5 @@ class Harmoniczny(Potencjal):
         return (self.__k/2)*(x - self.__x0)**2
     
     def calc_forces(self, k1, k2):
-        x = abs(k1.poz[0] - k2.poz[0])
-        return -1*self.k*(x-self.x0)
+#        x = abs(k1.poz[0] - k2.poz[0])
+        return -1*self.__k*(k1.pos_get[-1]-k2.pos_get[-1])
