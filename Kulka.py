@@ -14,6 +14,12 @@ class Kulka():
     def pos_set(self, new_pos):
         self.__polozenie.append(new_pos)
     
+    # sprawdzam jak przemieszcza sie kulka
+    @property
+    def pos_get_all(self):
+        pozycja = self.__polozenie
+        return pozycja
+    
     @property
     def ver_get(self):
         ver = self.__v[-1]

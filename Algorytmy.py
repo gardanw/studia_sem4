@@ -15,37 +15,26 @@ class Algorytmy:
         pass
     
 class LeapFrog(Algorytmy):
-    def __init__(self, t=100, dt=0.001):
-        self.__atom = [0]
-        self.__predkosc = [0]
-        self.__lista_polozen = [self.__atom]
-        self.__lista_predkosci = [self.__predkosc]
+    def __init__(self, dt=0.001):
+        self.__dimension = 1
         self.__tarcie = 0.9
-        self.__t = t
         self.__dt = dt
-        self.__x = []
-#        self.__y = []
-#        self.__z = []
-            
-    def ruch(self, kulka):
-        for i in range(self.__t):
-#            self.__x.append(ran.uniform(-1,1))
-#            self.__y.append(ran.uniform(-1,1))
-#            self.__z.append(ran.uniform(-1,1))
-#            norm = (math.sqrt((self.__x[i]**2)+(self.__y[i]**2)+(self.__z[i]**2)))
-            f=ran.uniform(-1,1)/m
-            pomocnicza_lista_pose = [0]
-            pomocnicza_lista_ver = [0]
-#            petla wykonywana j=dim
-            for j in range(len(self.__atom)):
-                pomocnicza_lista_ver[j] = kulka.v[-1] + f*self.__dt
-                pomocnicza_lista_pose[j] = kulka.pose[-1] + pomocnicza_lista_ver[j]*self.__dt
-        return pomocnicza_lista_pose, pomocnicza_lista_ver
+    
+    def update_pos(self, new_pos, kulka):
+        kulka.pos_set(new_pos)
+    
+    def update_ver(self, new_ver, kulka):
+        kulka.ver_set(new_ver)
+    
+    def ruch(self, force, kulka):
+        f=force
+        pomocnicza_lista_pos = [0]
+        pomocnicza_lista_ver = [0]
+#        petla wykonywana j=dim
+        for j in range(self.__dimension):
+            pomocnicza_lista_ver[j] = kulka.ver_get[j] + f*self.__dt
+            pomocnicza_lista_pos[j] = kulka.pos_get[j] + pomocnicza_lista_ver[j]*self.__dt
+        return pomocnicza_lista_pos, pomocnicza_lista_ver
             
             
         
-    def update_pose(self):
-        kulka.pose.append(ruch[0])
-    
-    def update_ver(self):
-        kulka.v.append(ruch[1])
