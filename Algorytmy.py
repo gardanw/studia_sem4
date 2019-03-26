@@ -15,11 +15,11 @@ class Algorytmy:
         pass
     
 class LeapFrog(Algorytmy):
-    def __init__(self, dt=0.001):
+    def __init__(self, dt=0.1):
         self.__dimension = 1
         self.__tarcie = 0.9
         self.__dt = dt
-    
+#        self.__x = []
     def update_pos(self, new_pos, kulka):
         kulka.pos_set(new_pos)
     
@@ -27,6 +27,7 @@ class LeapFrog(Algorytmy):
         kulka.ver_set(new_ver)
     
     def ruch(self, force, kulka):
+#        self.__x.append(ran.uniform(-1,1))
         f=force
         pomocnicza_lista_pos = [0]
         pomocnicza_lista_ver = [0]
