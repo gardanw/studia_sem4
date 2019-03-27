@@ -11,7 +11,7 @@ class Potencjal:
         pass
     
 class Harmoniczny(Potencjal):
-    def __init__(self, k=0.75, x0=0):
+    def __init__(self, k=0.75, x0=1):
         self.__k = k
         self.__x0 = x0
     
@@ -20,9 +20,13 @@ class Harmoniczny(Potencjal):
         return (self.__k/2)*(x - self.__x0)**2
     
     def calc_forces(self, k1, k2):
-        x = k1.pos_get[0]-k2.pos_get[0]
+        x = abs(k1.pos_get[0]-k2.pos_get[0])
+        print('x ',x)
         d = np.linalg.norm(x)
         v = x / d
-        f1 = -1*self.__k*(x - self.__x0)*v
-        f2 = self.__k*(x - self.__x0)*v
-        return [f1, f2]
+        print('v ', v)
+#        f1 = self.__k*(x - self.__x0)*v
+        f = -self.__k*(x - self.__x0)
+        return f
+    
+#if __name__ == "__main__":

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import random as ran
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import math
 from Uklad import Uklad
@@ -15,7 +13,7 @@ class Algorytmy:
         pass
     
 class LeapFrog(Algorytmy):
-    def __init__(self, dt=0.1):
+    def __init__(self, dt=0.01):
         self.__dimension = 1
         self.__tarcie = 0.9
         self.__dt = dt
