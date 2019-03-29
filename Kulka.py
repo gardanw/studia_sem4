@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import numpy as np
 class Kulka():
     def __init__(self, pol, m, v):
         self.__polozenie = [pol]
@@ -29,7 +30,7 @@ class Kulka():
         self.__v.append(new_ver)
 
 if __name__ == "__main__":
-    kulka = Kulka([1], 7, [1])
+    kulka = Kulka(np.array([1]), 7, np.array([1]))
     x = kulka.pos_get
     print(x)
     kulka.pos_set([2])
