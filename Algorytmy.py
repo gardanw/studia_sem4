@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import random as ran
-import numpy as np
-import math
-from Uklad import Uklad
-from Kulka import Kulka
 
 class Algorytmy:
     def update_pose(self):
         pass
+    
     def update_ver(self):
         pass
     
@@ -17,6 +13,7 @@ class LeapFrog(Algorytmy):
         self.__dimension = 1
         self.__tarcie = 0.9
         self.__dt = dt
+        
     def update_pos(self, new_pos, kulka):
         kulka.pos_set(new_pos)
     
