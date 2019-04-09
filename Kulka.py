@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 class Kulka():
-    def __init__(self, pol, m, v):
+    def __init__(self, pol, m, v, idk):
         self.__polozenie = [pol]
         self.__masa = m
         self.__v = [v]
+        self.__idk = idk
     
     @property
     def pos_get(self):
@@ -28,6 +29,11 @@ class Kulka():
     
     def ver_set(self, new_ver):
         self.__v.append(new_ver)
+        
+    @property
+    def id_get(self):
+        idk = self.__idk
+        return idk
 
 if __name__ == "__main__":
     kulka = Kulka(np.array([1]), 7, np.array([1]))

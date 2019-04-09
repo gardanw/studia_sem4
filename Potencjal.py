@@ -22,13 +22,18 @@ class Harmoniczny(Potencjal):
         return (self.__k/2)*(x - self.__x0)**2
     
     def calc_forces(self, uklad):
-        k1, k2 = uklad.kulka_get[0], uklad.kulka_get[1]
-        x = k1.pos_get-k2.pos_get
-        d = np.linalg.norm(x)
-        v = x / d
-        f1 = -self.__k*(d - self.__x0)*v
-        f2 = self.__k*(d - self.__x0)*v
-        return [f1,f2]
+        f = np.zeros((len(uklad.kulka_get), uklad.dim_get))
+        for i in uklad.imp_get:
+            k1, k2 = i[0], i[1]
+            x = k1.pos_get-k2.pos_get
+            d = np.linalg.norm(x)
+            v = x / d
+#            f1 = -self.__k*(d - self.__x0)*v
+#            print(f1)
+            f[k1.id_get] = -self.__k*(d - self.__x0)*v
+            f[k2.id_get] = self.__k*(d - self.__x0)*v
+            
+        return f
     
 class Langevin(Potencjal):
     def __init__(self, tarcie = 1):
