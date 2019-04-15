@@ -27,16 +27,21 @@ class Symulacje():
     
 if __name__ == "__main__":
     kule = []
-    n = 10
+    n = 3
     for i in range(n):
-        kule.append(Kulka(np.array([i]), 1, np.array([0]), idk = i))
-#    kule.append(Kulka(np.array([n]), 1, np.array([0]), idk = n))
+        for j in range(n):
+            kule.append(Kulka(np.array([i,j]), 1, np.array([0,0]), idk = i))
+#    kule.append(Kulka(np.array([1,1]), 1, np.array([0,0]), idk = n))
 #    kulka5 = Kulka(np.array([3.1]), 1, np.array([0]), idk = 4)
     im = []
-    for i in range(len(kule)-1):
-        im.append([kule[i],kule[i+1]])
-    
-    uklad = Uklad(kule, dim =1, T = 300, imp = im)
+    for i in range(len(kule)):
+        for j in range(len(kule)):
+            if j != i and {kule[i],kule[j]} not in im:        
+                im.append({kule[i],kule[j]})
+    for i in range(len(im)):
+        im[i] = list(im[i])
+    print(im)
+    uklad = Uklad(kule, dim =2, T = 300, imp = im)
     potencjal = [Har(k=1, x0=2), Lv(tarcie=0.9)]
     algorytm = LF()
     s = Symulacje(uklad, potencjal, algorytm, steps = 5000)
@@ -57,7 +62,16 @@ if __name__ == "__main__":
 #        a3.append(a1[i][0]-a2[i][0])
 #    print(a1, a2)
     for i in range(len(pozycje)):
-        plt.plot(pozycje[i])
+        x = []
+        y = []
+#        print(pozycje)
+        for j in range(len(pozycje[i])):
+            x.append(pozycje[i][j][0])
+            y.append(pozycje[i][j][1])
+#        print('x \n',x,'y \n', y)
+#        print('Kulka', i, pozycje[i])
+        plt.plot(x,y)
+#    plt.plot(np.array(pozycje[0]))
     plt.show()
 #    plt.plot(a3)
 #    plt.show()
