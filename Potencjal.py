@@ -27,7 +27,7 @@ class Harmoniczny(Potencjal):
             k1, k2 = i[0], i[1]
             x = k1.pos_get-k2.pos_get
             d = np.linalg.norm(x)
-            v = x / d
+            v = x/d
 #            f1 = -self.__k*(d - self.__x0)*v
 #            print(f1)
             f[k1.id_get] = -self.__k*(d - self.__x0)*v

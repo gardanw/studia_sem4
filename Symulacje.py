@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from Potencjal import Harmoniczny as Har
-from Potencjal import Langevin as Lv
+from Potencjal import Harmoniczny as Har, Langevin as Lv
+#from Potencjal import Langevin as Lv
 from Algorytmy import LeapFrog as LF
 from Uklad import Uklad
 from Kulka import Kulka
@@ -26,52 +26,18 @@ class Symulacje():
         return True
     
 if __name__ == "__main__":
-    kule = []
-    n = 3
-    for i in range(n):
-        for j in range(n):
-            kule.append(Kulka(np.array([i,j]), 1, np.array([0,0]), idk = i))
-#    kule.append(Kulka(np.array([1,1]), 1, np.array([0,0]), idk = n))
-#    kulka5 = Kulka(np.array([3.1]), 1, np.array([0]), idk = 4)
-    im = []
-    for i in range(len(kule)):
-        for j in range(len(kule)):
-            if j != i and {kule[i],kule[j]} not in im:        
-                im.append({kule[i],kule[j]})
-    for i in range(len(im)):
-        im[i] = list(im[i])
-    print(im)
-    uklad = Uklad(kule, dim =2, T = 300, imp = im)
-    potencjal = [Har(k=1, x0=2), Lv(tarcie=0.9)]
-    algorytm = LF()
-    s = Symulacje(uklad, potencjal, algorytm, steps = 5000)
-    s.run()
-    
-    pozycje = []
-    for i in range(len(kule)):
-        pozycje.append(uklad.kulka_get[i].pos_get_all)
-    
-#    odleglosci = []
-#    for i in range(len(im)):
-#        for j in range(len(a1)):
-#            odleglosci.append(a1[i][0]-a2[i][0])
-#    a1 = uklad.kulka_get[0].pos_get_all
-#    a2 = uklad.kulka_get[1].pos_get_all
-#    a3 = []
-#    for i in range(len(a1)):
-#        a3.append(a1[i][0]-a2[i][0])
-#    print(a1, a2)
-    for i in range(len(pozycje)):
-        x = []
-        y = []
-#        print(pozycje)
-        for j in range(len(pozycje[i])):
-            x.append(pozycje[i][j][0])
-            y.append(pozycje[i][j][1])
-#        print('x \n',x,'y \n', y)
-#        print('Kulka', i, pozycje[i])
-        plt.plot(x,y)
-#    plt.plot(np.array(pozycje[0]))
-    plt.show()
-#    plt.plot(a3)
-#    plt.show()
+    kulki = []
+    kulki.append(Kulka(np.array([0]), 1, np.array([0]), 0))
+    kulki.append(Kulka(np.array([1]), 1, np.array([0]), 1))
+    kulki.append(Kulka(np.array([2]), 1, np.array([0]), 2))
+    kulki.append(Kulka(np.array([3]), 1, np.array([0]), 3))
+    uklad = Uklad(kulki, dim = len(kulki[0].pos_get), T = 300, imp = [[kulki[0], kulki[1]], [kulki[1], kulki[2]], [kulki[2], kulki[3]], [kulki[3], kulki[0]]])
+    pot = [Har(k = 0.1, x0 = 2), Lv(tarcie = 0.9)]
+    alg = LF()
+    sym = Symulacje(uklad, pot, alg, steps=10000)
+    sym.run()
+#    print('kulka 0: \n', kulki[0].pos_get_all, '\n kulka 1: \n', kulki[1].pos_get_all)
+    plt.plot(kulki[0].pos_get_all)
+    plt.plot(kulki[1].pos_get_all)
+    plt.plot(kulki[2].pos_get_all)
+    plt.plot(kulki[3].pos_get_all)
