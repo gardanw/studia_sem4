@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pygame, sys, os
 import numpy as np
+import random as ran
 from pygame.locals import *
 #from gracz import Gracz
 from pygame.math import Vector2
@@ -19,7 +20,9 @@ class DrawSym(object):
         self.tps_delta = 0.0
         
         self.lista_pos_at = lista_atomow
-        self.kolory = [(200,0,0),(0,200,0),(0,0,200),(200,200,0)]
+        self.kolory = []
+        for i in range(len(self.lista_pos_at)):
+            self.kolory.append((ran.randrange(255),ran.randrange(255),ran.randrange(255)))
         i = 0
         while True:
             #sprawdza nowe zdarzania
