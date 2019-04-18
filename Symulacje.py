@@ -5,8 +5,10 @@ from Potencjal import Harmoniczny as Har, Langevin as Lv
 from Algorytmy import LeapFrog as LF
 from Uklad import Uklad
 from Kulka import Kulka
+from DrawSym import DrawSym as ds
 import numpy as np
 import matplotlib.pyplot as plt
+
 
 class Symulacje():
     def __init__(self, uklad, potencjal, algorytm, steps = 5000):
@@ -27,17 +29,20 @@ class Symulacje():
     
 if __name__ == "__main__":
     kulki = []
-    kulki.append(Kulka(np.array([0]), 1, np.array([0]), 0))
-    kulki.append(Kulka(np.array([1]), 1, np.array([0]), 1))
-    kulki.append(Kulka(np.array([2]), 1, np.array([0]), 2))
-    kulki.append(Kulka(np.array([3]), 1, np.array([0]), 3))
+    kulki.append(Kulka(np.array([0,0]), 1, np.array([0,0]), 0))
+    kulki.append(Kulka(np.array([10,0]), 1, np.array([0,0]), 1))
+    kulki.append(Kulka(np.array([20,0]), 1, np.array([0,0]), 2))
+    kulki.append(Kulka(np.array([30,0]), 1, np.array([0,0]), 3))
     uklad = Uklad(kulki, dim = len(kulki[0].pos_get), T = 300, imp = [[kulki[0], kulki[1]], [kulki[1], kulki[2]], [kulki[2], kulki[3]], [kulki[3], kulki[0]]])
     pot = [Har(k = 0.1, x0 = 2), Lv(tarcie = 0.9)]
     alg = LF()
     sym = Symulacje(uklad, pot, alg, steps=10000)
     sym.run()
 #    print('kulka 0: \n', kulki[0].pos_get_all, '\n kulka 1: \n', kulki[1].pos_get_all)
+    print(kulki[0].pos_get_all[30][0])
     plt.plot(kulki[0].pos_get_all)
     plt.plot(kulki[1].pos_get_all)
     plt.plot(kulki[2].pos_get_all)
     plt.plot(kulki[3].pos_get_all)
+    plt.show()
+    ds([kulki[0].pos_get_all,kulki[1].pos_get_all,kulki[2].pos_get_all,kulki[3].pos_get_all])
