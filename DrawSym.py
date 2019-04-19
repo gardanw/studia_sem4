@@ -14,7 +14,7 @@ class DrawSym(object):
         #initalisation
         pygame.init()
         
-        self.window = pygame.display.set_mode((1000, 1000)) #tworzy okno
+        self.window = pygame.display.set_mode((500, 500)) #tworzy okno
         
         self.tps_clock = pygame.time.Clock() #zegar
         self.tps_delta = 0.0
@@ -48,6 +48,6 @@ class DrawSym(object):
     def draw(self, i):
         #rysuje
         for pos, k in zip(self.lista_pos_at, self.kolory):
-            postac = pygame.Rect(pos[i][0]+500, pos[i][1]+500, 10, 10)
+            postac = pygame.Rect(pos[i][0]+250, pos[i][1]+250, 5, 5)
             pygame.draw.rect(self.window, k, postac)
 #        self.player3.prostokat()

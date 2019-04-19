@@ -30,8 +30,8 @@ class Harmoniczny(Potencjal):
             v = x/d
 #            f1 = -self.__k*(d - self.__x0)*v
 #            print(f1)
-            f[k1.id_get] = -self.__k*(d - self.__x0)*v
-            f[k2.id_get] = self.__k*(d - self.__x0)*v
+            f[k1.id_get] += -self.__k*(d - self.__x0)*v
+            f[k2.id_get] += self.__k*(d - self.__x0)*v
             
         return f
     
@@ -46,3 +46,7 @@ class Langevin(Potencjal):
             for j in range(uklad.dim_get):
                 f[i][j] = np.sqrt(2*self.__tarcie*kb*uklad.T_get)*ran.gauss(0, 1)
         return f
+
+class LennardJones(Potencjal):
+    def __init__(self):
+        pass
