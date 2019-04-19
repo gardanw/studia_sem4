@@ -32,6 +32,7 @@ class Harmoniczny(Potencjal):
 #            print(f1)
             f[k1.id_get] += -self.__k*(d - self.__x0)*v
             f[k2.id_get] += self.__k*(d - self.__x0)*v
+#            print(self.__k,'*(',d,' - ',self.__x0,')*',v,'\n', f[k1.id_get])
             
         return f
     
@@ -48,5 +49,18 @@ class Langevin(Potencjal):
         return f
 
 class LennardJones(Potencjal):
-    def __init__(self):
-        pass
+    def __init__(self, r0, eps = 1):
+        self.__r0 = r0
+        self.__eps = eps
+        
+    def calc_forces(self, uklad):
+        f = np.zeros((len(uklad.kulka_get), uklad.dim_get))
+        for i in uklad.imp_get:
+            k1, k2 = i[0], i[1]
+            r = k1.pos_get-k2.pos_get
+            d = np.linalg.norm(r)
+            v = r/d
+            f[k1.id_get] += self.__eps*((self.__r0/d)**12 - 2*(self.__r0/d)**6)*v
+            f[k2.id_get] += -self.__eps*((self.__r0/d)**12 - 2*(self.__r0/d)**6)*v
+#            print(self.__eps, '*((', self.__r0, '/', d, ')**', 12, '-', 2, '*', '(', self.__r0, '/', d, ')**', 6, ')*', v, '\n', f[k1.id_get])
+        return f

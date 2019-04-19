@@ -26,6 +26,10 @@ class LeapFrog(Algorytmy):
         for j in range(len(kulki)):
             new_ver = kulki[j].ver_get + f[j]*self.__dt
             new_pos = kulki[j].pos_get + new_ver*self.__dt
+            if new_pos[0] < kulki[0].pos_get_all[0][0] or new_pos[0] > kulki[-1].pos_get_all[0][0] or new_pos[1] > kulki[-1].pos_get_all[0][0] or new_pos[1] < kulki[0].pos_get_all[0][0]:
+#                print(kulki[j].id_get, new_pos)
+                new_ver = -1*new_ver
+                new_pos = kulki[j].pos_get + new_ver*self.__dt
             self.update_ver(new_ver, kulki[j])
             self.update_pos(new_pos, kulki[j])
             
