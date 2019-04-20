@@ -14,6 +14,8 @@ import random as ran
 
 def impacts(lista_kulek, key = 'von Neumanna'):
     im = []
+    pom = int((len(lista_kulek))**(1/2))
+#    print(pom)
     if key == 'all':
         for i in lista_kulek:
             for j in lista_kulek:
@@ -23,10 +25,15 @@ def impacts(lista_kulek, key = 'von Neumanna'):
             im[i] = list(im[i])
     elif key == 'von Neumanna':
         for i in range(len(lista_kulek)):
-            if i+np.sqrt(len(lista_kulek)) < len(lista_kulek):
-                im.append([lista_kulek[i], lista_kulek[int(i+(len(lista_kulek))**(1/2))]])
+            if i+ pom < len(lista_kulek):
+                im.append([lista_kulek[i], lista_kulek[int(i+pom)]])
+            else:
+#                print(i % pom, i)
+                im.append([lista_kulek[i],lista_kulek[i % pom]])
             if (i+1)% np.sqrt(len(lista_kulek)) != 0:
                 im.append([lista_kulek[i], lista_kulek[i+1]])
+            else:
+                im.append([lista_kulek[i], lista_kulek[int(i - pom +1)]])
     return im
 
 class Symulacje():
@@ -58,6 +65,7 @@ class Symulacje():
                 f += p.calc_forces(self.__uklad)
 #            print(f)
             self.__algorytm.ruch(f, self.__uklad.kulka_get)
+            print(self.__uklad.kulka_get[0].pos_get[0], self.__uklad.kulka_get[1].pos_get[1], 5, 5)
         # testtuje
         return True
     
@@ -114,10 +122,11 @@ if __name__ == "__main__":
     uklad = Uklad(kulki, dim = len(kulki[0].pos_get), T = 300, imp = impacts(kulki))
     pot = []
 #    pot.append(Har(k = 1, x0 = 25))
-    pot.append(Lv(tarcie=0.9))
-    pot.append(Lj(r0 = 25))
+#    pot.append(Lv(tarcie=0.9))
+    pot.append(Lj(r0 = 25, eps=1))
     alg = LF()
-    sym = Symulacje(uklad, pot, alg, steps=1000)
+    sym = Symulacje(uklad, pot, alg, steps=1)
+#    sym.run()
     sym.drawrun()
 #    print('kulka 0: \n', kulki[0].pos_get_all, '\n kulka 1: \n', kulki[1].pos_get_all)
 #    plt.plot(kulki[0].pos_get_all)
