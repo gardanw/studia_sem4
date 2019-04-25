@@ -6,16 +6,20 @@ from Algorytmy import LeapFrog as LF
 from Uklad import Uklad
 from Kulka import Kulka
 from DrawSym import DrawSym as ds
-from pygame.locals import *
-import pygame, sys, os
+import pygame, sys
 import numpy as np
 import matplotlib.pyplot as plt
 import random as ran
 
 def impacts(lista_kulek, key = 'von Neumanna'):
+    '''
+    Przyjmuje lista obiektow typu Kulka i klucz typu string.
+    Mozliwe klucze: 
+    "von Neumanna" -  tworzy wiazania z sasiadami
+    "all" - tworzy wiazania miedzy wszystkimi obiektami
+    '''
     im = []
     pom = int((len(lista_kulek))**(1/2))
-#    print(pom)
     if key == 'all':
         for i in lista_kulek:
             for j in lista_kulek:
@@ -110,35 +114,27 @@ if __name__ == "__main__":
         for j in range(n):
             kulki.append(Kulka(np.array([i*25, j*25]), 1, np.array([0,0]), idk = id))
             id += 1
-    print(id)
-#    kulki.append(Kulka(np.array([100,100]), 1, np.array([0,0]), 0))
-#    kulki.append(Kulka(np.array([100,200]), 1, np.array([0,0]), 1))
-#    kulki.append(Kulka(np.array([200,100]), 1, np.array([0,0]), 2))
-#    kulki.append(Kulka(np.array([200,200]), 1, np.array([0,0]), 3))
+    print('ilosc atomow =', id)
 
-    
-#    im = [[kulki[0],kulki[1]],[kulki[0],kulki[2]],[kulki[1],kulki[3]],[kulki[2],kulki[3]]]                
-#    imp = [[kulki[0], kulki[1]], [kulki[1], kulki[2]], [kulki[2], kulki[3]], [kulki[3], kulki[0]]]
     uklad = Uklad(kulki, dim = len(kulki[0].pos_get), T = 300, imp = impacts(kulki))
+    
+    # tworzenie listy potencjalow
     pot = []
-#    pot.append(Har(k = 1, x0 = 25))
-#    pot.append(Lv(tarcie=0.9))
-    pot.append(Lj(r0 = 25, eps=1))
+    pot.append(Har(k = 1, x0 = 25))
+    pot.append(Lv(tarcie=0.3))
+#    pot.append(Lj(r0 = 25, eps=1))
+    
     alg = LF()
     sym = Symulacje(uklad, pot, alg, steps=1)
-#    sym.run()
+    # symulacja z wizualizacja
     sym.drawrun()
-#    print('kulka 0: \n', kulki[0].pos_get_all, '\n kulka 1: \n', kulki[1].pos_get_all)
-#    plt.plot(kulki[0].pos_get_all)
-#    plt.plot(kulki[1].pos_get_all)
-#    plt.plot(kulki[2].pos_get_all)
-#    plt.plot(kulki[3].pos_get_all)
-#    plt.show()
-#    print(len(uklad.imp_get))
-#    for i in range(len(kulki)):
-#        print(kulki[i].pos_get_all, kulki[i].id_get)
-    lista_pos = []
-    for i in range(len(kulki)):
-        lista_pos.append(kulki[i].pos_get_all)
+    
+    # symulacja bez wizualizacji
+#    sym.run()
+    
+    # wizualizacja po symylacji
+#    lista_pos = []
+#   for i in range(len(kulki)):
+#        lista_pos.append(kulki[i].pos_get_all)
 #    ds(lista_pos)
     

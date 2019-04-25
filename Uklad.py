@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from Kulka import Kulka
 import numpy as np
+
 class Uklad():
     def __init__(self, lista_kulek, dim, T, imp):
         self.__lista_kulek = lista_kulek

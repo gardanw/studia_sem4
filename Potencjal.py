@@ -29,11 +29,15 @@ class Harmoniczny(Potencjal):
             k1, k2 = i[0], i[1]
             lista_x = []
             x = k1.pos_get-k2.pos_get
+            
+            # tworzenie listy wektorow odleglosci
             lista_x.append(x)
             lista_x.append(x + np.array([0, uklad.kulka_get[-1].pos_get_all[0][1] + odl_pom]))
             lista_x.append(x - np.array([0, uklad.kulka_get[-1].pos_get_all[0][1] - odl_pom]))
             lista_x.append(x + np.array([uklad.kulka_get[-1].pos_get_all[0][0] + odl_pom, 0]))
             lista_x.append(x - np.array([uklad.kulka_get[-1].pos_get_all[0][0] - odl_pom, 0]))
+            
+            # liczenie najmniejszej odleglosci
             lista_d = []
             for i in range(len(lista_x)):
                 if np.linalg.norm(lista_x[i]) != 0.0:
@@ -76,7 +80,6 @@ class LennardJones(Potencjal):
         for i in uklad.imp_get:
             k1, k2 = i[0], i[1]
             lista_r = []
-#            print(k1.pos_get,k2.pos_get)
             r = k1.pos_get-k2.pos_get
             lista_r.append(r)
             lista_r.append(r + np.array([0, uklad.kulka_get[-1].pos_get_all[0][1] + odl_pom]))
@@ -91,7 +94,6 @@ class LennardJones(Potencjal):
 #                else:
 #                    lista_d.append(np.linalg.norm(lista_r[i])+0.00001)
             d = min(lista_d)
-#            r = k1.pos_get-k2.pos_get
 #            d = np.linalg.norm(r)
 #            print(k1.id_get,k2.id_get,'\n', lista_r,lista_d, d)
             v = r/d
