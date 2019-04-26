@@ -22,7 +22,7 @@ class LeapFrog(Algorytmy):
     
     def ruch(self, force, kulki):
         f=force
-        odl_pom = kulki[-1].pos_get_all[0][0] / (len(kulki)**(1/2) - 1)
+        odl_pom = kulki[-2].pos_get_all[0][0] / ((len(kulki)/2)**(1/2) - 1)
         # petla wykonywana dla kazdej kulki
         for j in range(len(kulki)):
             new_ver = kulki[j].ver_get + f[j]*self.__dt

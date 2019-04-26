@@ -23,8 +23,8 @@ class Harmoniczny(Potencjal):
     
     def calc_forces(self, uklad):
         f = np.zeros((len(uklad.kulka_get), uklad.dim_get))
-        odl_pom = uklad.kulka_get[-1].pos_get_all[0][0] / (len(uklad.kulka_get)**(1/2) - 1)
-        for i in uklad.imp_get:
+        odl_pom = uklad.kulka_get[-2].pos_get_all[0][0] / ((len(uklad.kulka_get)/2)**(1/2) - 1)
+        for i in uklad.imp_get['har']:
             k1, k2 = i[0], i[1]
             lista_x = []
             x = k1.pos_get-k2.pos_get
@@ -69,8 +69,8 @@ class LennardJones(Potencjal):
         
     def calc_forces(self, uklad):
         f = np.zeros((len(uklad.kulka_get), uklad.dim_get))
-        odl_pom = uklad.kulka_get[-1].pos_get_all[0][0] / (len(uklad.kulka_get)**(1/2) - 1)
-        for i in uklad.imp_get:
+        odl_pom = uklad.kulka_get[-2].pos_get_all[0][0] / ((len(uklad.kulka_get)/2)**(1/2) - 1)
+        for i in uklad.imp_get['Lj']:
             k1, k2 = i[0], i[1]
             lista_r = []
             r = k1.pos_get-k2.pos_get

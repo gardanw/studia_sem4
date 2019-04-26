@@ -19,7 +19,7 @@ def impacts(lista_kulek, key = 'von Neumanna'):
     "all" - tworzy wiazania miedzy wszystkimi obiektami
     '''
     im = []
-    pom = int((len(lista_kulek))**(1/2))
+    pom = int((len(lista_kulek)/2)**(1/2))
     if key == 'all':
         for i in lista_kulek:
             for j in lista_kulek:
@@ -28,16 +28,19 @@ def impacts(lista_kulek, key = 'von Neumanna'):
         for i in range(len(im)):
             im[i] = list(im[i])
     elif key == 'von Neumanna':
-        for i in range(len(lista_kulek)):
-            if i+ pom < len(lista_kulek):
-                im.append([lista_kulek[i], lista_kulek[int(i+pom)]])
+        for i in range(0, int(len(lista_kulek)/2), 2):
+            if i + 2*pom < len(lista_kulek):
+                im.append([lista_kulek[i], lista_kulek[int(i+ 2*pom)]])
             else:
 #                print(i % pom, i)
-                im.append([lista_kulek[i],lista_kulek[i % pom]])
-            if (i+1)% np.sqrt(len(lista_kulek)) != 0:
-                im.append([lista_kulek[i], lista_kulek[i+1]])
+                im.append([lista_kulek[i],lista_kulek[i % 2*pom]])
+            if (i+2)% np.sqrt(len(lista_kulek)/2) != 0:
+                im.append([lista_kulek[i], lista_kulek[i+2]])
             else:
-                im.append([lista_kulek[i], lista_kulek[int(i - pom +1)]])
+                im.append([lista_kulek[i], lista_kulek[int(i - 2*pom +2)]])
+    elif key == 'molecule':
+        for i in range(0,len(lista_kulek),2):
+            im.append([lista_kulek[i], lista_kulek[i+1]])
     return im
 
 class Symulacje():
@@ -53,7 +56,7 @@ class Symulacje():
         #initalisation
         pygame.init()
         
-        self.window = pygame.display.set_mode((500, 500)) #tworzy okno
+        self.window = pygame.display.set_mode((475, 475)) #tworzy okno
         
         self.tps_clock = pygame.time.Clock() #zegar
         self.tps_delta = 0.0
@@ -100,30 +103,34 @@ class Symulacje():
     
     def draw(self):
         #rysuje
-        odl_pom = kulki[-1].pos_get_all[0][0] / (len(kulki)**(1/2) - 1)
+        odl_pom = self.__uklad.kulka_get[-2].pos_get_all[0][0] / ((len(kulki)/2)**(1/2) - 1)
         for atom, kolor in zip(self.__uklad.kulka_get, self.kolory):
 #            print(atom.pos_get[0], atom.pos_get[1])
-            postac = pygame.Rect(atom.pos_get[0]+odl_pom/2, atom.pos_get[1]+odl_pom/2, 5, 5)
+            postac = pygame.Rect(atom.pos_get[0]+odl_pom/2, atom.pos_get[1]+odl_pom/2, 3.5, 3.5)
             pygame.draw.rect(self.window, kolor, postac)
 #        self.player3.prostokat()
     
 if __name__ == "__main__":
     kulki = []
     n = 10
+    x = 15
     id = 0
     for i in range(n):
         for j in range(n):
-            kulki.append(Kulka(np.array([j*25, i*25]), 1, np.array([0,0]), idk = id))
+            kulki.append(Kulka(np.array([j*3*x, i*3*x]), 1, np.array([0,0]), idk = id))
+            id += 1
+            kulki.append(Kulka(np.array([j*3*x+x, i*3*x]), 1, np.array([0,0]), idk = id))
             id += 1
     print('ilosc atomow =', id)
-
-    uklad = Uklad(kulki, dim = len(kulki[0].pos_get), T = 3000, imp = impacts(kulki))
+    
+    impac = {'har' : impacts(kulki, key='molecule'), 'Lj' : impacts(kulki, key='von Neumanna')}
+    uklad = Uklad(kulki, dim = len(kulki[0].pos_get), T = 300, imp = impac)
     
     # tworzenie listy potencjalow
     pot = []
-#    pot.append(Har(k = 1, x0 = 25))
+    pot.append(Har(k = 1, x0 = x))
     pot.append(Lv(tarcie=0.3))
-    pot.append(Lj(r0 = 25, eps=1))
+    pot.append(Lj(r0 = x/3, eps=1))
     
     alg = LF()
     sym = Symulacje(uklad, pot, alg, steps=1)
