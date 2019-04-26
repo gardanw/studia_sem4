@@ -89,10 +89,10 @@ class LennardJones(Potencjal):
             lista_d = []
             for i in range(len(lista_r)):
                 lista_d.append(np.linalg.norm(lista_r[i]))
-#                if np.linalg.norm(lista_r[i]) != 0.0:
-#                    lista_d.append(np.linalg.norm(lista_r[i]))
-#                else:
-#                    lista_d.append(np.linalg.norm(lista_r[i])+0.00001)
+                if np.linalg.norm(lista_r[i]) != 0.0:
+                    lista_d.append(np.linalg.norm(lista_r[i]))
+                else:
+                    lista_d.append(np.linalg.norm(lista_r[i])+0.00001)
             d = min(lista_d)
 #            d = np.linalg.norm(r)
 #            print(k1.id_get,k2.id_get,'\n', lista_r,lista_d, d)
