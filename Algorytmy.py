@@ -30,12 +30,12 @@ class LeapFrog(Algorytmy):
          
             # pseldo wszechswiat
             if new_pos[0] < -odl_pom/2:
-                new_pos[0] += (kulki[-1].pos_get_all[0][0] + odl_pom)
-            if new_pos[0] > kulki[-1].pos_get_all[0][0] + odl_pom/2:
+                new_pos[0] += (kulki[-2].pos_get_all[0][0] + odl_pom)
+            if new_pos[0] > kulki[-2].pos_get_all[0][0] + odl_pom/2:
                 new_pos[0] = -odl_pom/2
             if new_pos[1] < -odl_pom/2:
-                new_pos[1] += (kulki[-1].pos_get_all[0][0] + odl_pom)
-            if new_pos[1] > kulki[-1].pos_get_all[0][0] + odl_pom/2:
+                new_pos[1] += (kulki[-2].pos_get_all[0][0] + odl_pom)
+            if new_pos[1] > kulki[-2].pos_get_all[0][0] + odl_pom/2:
                 new_pos[1] = -odl_pom/2
             
             # zmiana predkosci i polozenia

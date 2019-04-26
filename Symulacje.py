@@ -16,6 +16,7 @@ def impacts(lista_kulek, key = 'von Neumanna'):
     Przyjmuje lista obiektow typu Kulka i klucz typu string.
     Mozliwe klucze: 
     "von Neumanna" -  tworzy wiazania z sasiadami
+    "molecule" - tworzy wiazania w czasteczkach
     "all" - tworzy wiazania miedzy wszystkimi obiektami
     '''
     im = []
@@ -28,12 +29,12 @@ def impacts(lista_kulek, key = 'von Neumanna'):
         for i in range(len(im)):
             im[i] = list(im[i])
     elif key == 'von Neumanna':
-        for i in range(0, int(len(lista_kulek)/2), 2):
+        for i in range(0, int(len(lista_kulek)), 2):
             if i + 2*pom < len(lista_kulek):
                 im.append([lista_kulek[i], lista_kulek[int(i+ 2*pom)]])
             else:
 #                print(i % pom, i)
-                im.append([lista_kulek[i],lista_kulek[i % 2*pom]])
+                im.append([lista_kulek[i],lista_kulek[i % (2*pom)]])
             if (i+2)% np.sqrt(len(lista_kulek)/2) != 0:
                 im.append([lista_kulek[i], lista_kulek[i+2]])
             else:
@@ -50,6 +51,32 @@ class Symulacje():
         self.__algorytm = algorytm
         self.__steps = steps
         
+        
+        
+        self.kolory = []
+        for i in range(len(self.__uklad.kulka_get)):
+            self.kolory.append((ran.randrange(255),ran.randrange(255),ran.randrange(255)))
+        
+    def run(self):
+        for j in range(15):
+            print('run...', j)
+            print('calc forces...')
+            for i in range(self.__steps):
+                f = np.zeros((len(self.__uklad.kulka_get), self.__uklad.dim_get))
+                for p in self.__potencjal:
+                    f += p.calc_forces(self.__uklad)
+                self.__algorytm.ruch(f, self.__uklad.kulka_get)
+            print('calc energy...')
+            e = np.zeros((len(self.__uklad.kulka_get), self.__uklad.dim_get))
+            for p in self.__potencjal:
+                e += p.calc_energy(self.__uklad)
+            self.__uklad.energy_set(e)
+            self.__uklad.T_set(self.__uklad.T_get + 25)
+        # testtuje
+        return True
+    
+    def drawrun(self):
+        
         #config
         self.tps_max = 100.0
         
@@ -60,23 +87,6 @@ class Symulacje():
         
         self.tps_clock = pygame.time.Clock() #zegar
         self.tps_delta = 0.0
-        
-        self.kolory = []
-        for i in range(len(self.__uklad.kulka_get)):
-            self.kolory.append((ran.randrange(255),ran.randrange(255),ran.randrange(255)))
-        
-    def run(self):
-        for i in range(self.__steps):
-            f = np.zeros((len(self.__uklad.kulka_get), self.__uklad.dim_get))
-            for p in self.__potencjal:
-                f += p.calc_forces(self.__uklad)
-#            print(f)
-            self.__algorytm.ruch(f, self.__uklad.kulka_get)
-            print(self.__uklad.kulka_get[0].pos_get[0], self.__uklad.kulka_get[1].pos_get[1], 5, 5)
-        # testtuje
-        return True
-    
-    def drawrun(self):
         while True:
             #sprawdza nowe zdarzania
             for event in pygame.event.get():
@@ -112,7 +122,7 @@ class Symulacje():
     
 if __name__ == "__main__":
     kulki = []
-    n = 10
+    n = 5
     x = 15
     id = 0
     for i in range(n):
@@ -123,8 +133,8 @@ if __name__ == "__main__":
             id += 1
     print('ilosc atomow =', id)
     
-    impac = {'har' : impacts(kulki, key='molecule'), 'Lj' : impacts(kulki, key='von Neumanna')}
-    uklad = Uklad(kulki, dim = len(kulki[0].pos_get), T = 300, imp = impac)
+    impac = {'Har' : impacts(kulki, key='molecule'), 'Lj' : impacts(kulki, key='von Neumanna')}
+    uklad = Uklad(kulki, dim = len(kulki[0].pos_get), T = 1, imp = impac)
     
     # tworzenie listy potencjalow
     pot = []
@@ -133,17 +143,26 @@ if __name__ == "__main__":
     pot.append(Lj(r0 = x/3, eps=1))
     
     alg = LF()
-    sym = Symulacje(uklad, pot, alg, steps=1)
+    sym = Symulacje(uklad, pot, alg, steps=1000)
     # symulacja z wizualizacja
-    sym.drawrun()
+#    sym.drawrun()
     
     # symulacja bez wizualizacji
-#    sym.run()
-    
+    sym.run()
+    print('end...')
+    e = []
+    for i in range(len(uklad.energy_get)):
+        e.append(np.mean(uklad.energy_get[i]))
+        print(1)
+    plt.plot(np.array(uklad.T_get_all), np.array(e))
+    plt.show()
+    print(2)
+#    print(np.mean(uklad.energy_get[1]))
     # wizualizacja po symylacji
-#    lista_pos = []
-#    for i in range(len(kulki)):
-#        lista_pos.append(kulki[i].pos_get_all)
+    lista_pos = []
+    for i in range(len(kulki)):
+        lista_pos.append(kulki[i].pos_get_all)
 #    print(lista_pos)
 #    ds(lista_pos)
+    
     
