@@ -53,7 +53,7 @@ class Symulacje():
         #initalisation
         pygame.init()
         
-        self.window = pygame.display.set_mode((230, 230)) #tworzy okno
+        self.window = pygame.display.set_mode((500, 500)) #tworzy okno
         
         self.tps_clock = pygame.time.Clock() #zegar
         self.tps_delta = 0.0
@@ -100,9 +100,10 @@ class Symulacje():
     
     def draw(self):
         #rysuje
+        odl_pom = kulki[-1].pos_get_all[0][0] / (len(kulki)**(1/2) - 1)
         for atom, kolor in zip(self.__uklad.kulka_get, self.kolory):
 #            print(atom.pos_get[0], atom.pos_get[1])
-            postac = pygame.Rect(atom.pos_get[0], atom.pos_get[1], 5, 5)
+            postac = pygame.Rect(atom.pos_get[0]+odl_pom/2, atom.pos_get[1]+odl_pom/2, 5, 5)
             pygame.draw.rect(self.window, kolor, postac)
 #        self.player3.prostokat()
     
@@ -112,17 +113,17 @@ if __name__ == "__main__":
     id = 0
     for i in range(n):
         for j in range(n):
-            kulki.append(Kulka(np.array([i*25, j*25]), 1, np.array([0,0]), idk = id))
+            kulki.append(Kulka(np.array([j*25, i*25]), 1, np.array([0,0]), idk = id))
             id += 1
     print('ilosc atomow =', id)
 
-    uklad = Uklad(kulki, dim = len(kulki[0].pos_get), T = 300, imp = impacts(kulki))
+    uklad = Uklad(kulki, dim = len(kulki[0].pos_get), T = 3000, imp = impacts(kulki))
     
     # tworzenie listy potencjalow
     pot = []
-    pot.append(Har(k = 1, x0 = 25))
+#    pot.append(Har(k = 1, x0 = 25))
     pot.append(Lv(tarcie=0.3))
-#    pot.append(Lj(r0 = 25, eps=1))
+    pot.append(Lj(r0 = 25, eps=1))
     
     alg = LF()
     sym = Symulacje(uklad, pot, alg, steps=1)
@@ -134,7 +135,8 @@ if __name__ == "__main__":
     
     # wizualizacja po symylacji
 #    lista_pos = []
-#   for i in range(len(kulki)):
+#    for i in range(len(kulki)):
 #        lista_pos.append(kulki[i].pos_get_all)
+#    print(lista_pos)
 #    ds(lista_pos)
     
