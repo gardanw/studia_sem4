@@ -139,13 +139,15 @@ if __name__ == "__main__":
     # tworzenie listy potencjalow
     pot = []
     pot.append(Har(k = 1, x0 = x))
-    pot.append(Lv(tarcie=0.3))
-    pot.append(Lj(r0 = x/3, eps=1))
-    
+#    pot.append(Lv(tarcie=0.3))
+    pot.append(Lj(r0 = x/3, eps=10))
+    uklad.kulka_get[-2].pos_set(uklad.kulka_get[-2].pos_get - np.array([30,30]))
+    uklad.kulka_get[-1].pos_set(uklad.kulka_get[-1].pos_get - np.array([15,30]))
     alg = LF()
     sym = Symulacje(uklad, pot, alg, steps=1000)
     # symulacja z wizualizacja
-#    sym.drawrun()
+    
+    sym.drawrun()
     
     # symulacja bez wizualizacji
     sym.run()
@@ -153,10 +155,8 @@ if __name__ == "__main__":
     e = []
     for i in range(len(uklad.energy_get)):
         e.append(np.mean(uklad.energy_get[i]))
-        print(1)
     plt.plot(np.array(uklad.T_get_all), np.array(e))
     plt.show()
-    print(2)
 #    print(np.mean(uklad.energy_get[1]))
     # wizualizacja po symylacji
     lista_pos = []

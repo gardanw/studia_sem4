@@ -139,6 +139,6 @@ class LennardJones(Potencjal):
             ind = lista_d.index(d)
             r = lista_r[ind]
             v = r/d
-            f[k1.id_get] += 4*self.__eps*((self.__r0/d)**12 - 2*(self.__r0/d)**6)*v
-            f[k2.id_get] += -4*self.__eps*((self.__r0/d)**12 - 2*(self.__r0/d)**6)*v
+            f[k1.id_get] += 4*self.__eps*(12*(self.__r0/d)**12 - 6*(self.__r0/d)**6)*v
+            f[k2.id_get] += -4*self.__eps*(12*(self.__r0/d)**12 - 6*(self.__r0/d)**6)*v
         return f
