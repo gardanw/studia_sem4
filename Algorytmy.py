@@ -9,7 +9,7 @@ class Algorytmy:
         pass
     
 class LeapFrog(Algorytmy):
-    def __init__(self, dt=0.01):
+    def __init__(self, dt=0.005):
         self.__dimension = 1
         self.__tarcie = 0.9
         self.__dt = dt
@@ -20,27 +20,31 @@ class LeapFrog(Algorytmy):
     def update_ver(self, new_ver, kulka):
         kulka.ver_set(new_ver)
     
-    def ruch(self, force, kulki):
+    def ruch(self, force, uklad):
         f=force
-        odl_pom = kulki[-2].pos_get_all[0][0] / ((len(kulki)/2)**(1/2) - 1)
+#        print('f',f)
+        odl_pom = uklad.kulka_get[-2].pos_get_all[0][0] / ((len(uklad.kulka_get)/2)**(1/2) - 1)
         # petla wykonywana dla kazdej kulki
-        for j in range(len(kulki)):
-            new_ver = kulki[j].ver_get + f[j]*self.__dt
-            new_pos = kulki[j].pos_get + new_ver*self.__dt
+        for j in range(len(uklad.kulka_get)):
+            new_ver = uklad.kulka_get[j].ver_get + f[j]*self.__dt
+#            print('0', new_ver)
+            new_ver = new_ver * -1 * uklad.tar_get
+#            print('1',new_ver)
+            new_pos = uklad.kulka_get[j].pos_get + new_ver*self.__dt
          
             # pseldo wszechswiat
             if new_pos[0] < -odl_pom/2:
-                new_pos[0] += (kulki[-2].pos_get_all[0][0] + odl_pom)
-            if new_pos[0] > kulki[-2].pos_get_all[0][0] + odl_pom/2:
+                new_pos[0] += (uklad.kulka_get[-2].pos_get_all[0][0] + odl_pom)
+            if new_pos[0] > uklad.kulka_get[-2].pos_get_all[0][0] + odl_pom/2:
                 new_pos[0] = -odl_pom/2
             if new_pos[1] < -odl_pom/2:
-                new_pos[1] += (kulki[-2].pos_get_all[0][0] + odl_pom)
-            if new_pos[1] > kulki[-2].pos_get_all[0][0] + odl_pom/2:
+                new_pos[1] += (uklad.kulka_get[-2].pos_get_all[0][0] + odl_pom)
+            if new_pos[1] > uklad.kulka_get[-2].pos_get_all[0][0] + odl_pom/2:
                 new_pos[1] = -odl_pom/2
             
             # zmiana predkosci i polozenia
-            self.update_ver(new_ver, kulki[j])
-            self.update_pos(new_pos, kulki[j])
+            self.update_ver(new_ver, uklad.kulka_get[j])
+            self.update_pos(new_pos, uklad.kulka_get[j])
             
             
         

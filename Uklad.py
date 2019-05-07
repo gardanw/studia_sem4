@@ -4,12 +4,13 @@ from Kulka import Kulka
 import numpy as np
 
 class Uklad():
-    def __init__(self, lista_kulek, dim, imp, T=300):
+    def __init__(self, lista_kulek, dim, imp, tarcie = 1, T=300):
         self.__lista_kulek = lista_kulek
         self.__dim = dim
         self.__T = [T]
         self.__imp = imp
         self.__energy = [np.zeros((len(self.__lista_kulek), self.__dim))]
+        self.__tarcie = tarcie
     
     def __iter__(self):
         yield from self.__lista_kulek
@@ -49,6 +50,11 @@ class Uklad():
     def imp_get(self):
         im = self.__imp
         return im
+    
+    @property    
+    def tar_get(self):
+        tar = self.__tarcie
+        return tar
 
 if __name__ == "__main__":
     kulka1 = Kulka(np.array([1]), 1, np.array([0]))

@@ -54,8 +54,10 @@ class Symulacje():
         
         
         self.kolory = []
-        for i in range(len(self.__uklad.kulka_get)):
-            self.kolory.append((ran.randrange(255),ran.randrange(255),ran.randrange(255)))
+        for i in range(int(len(self.__uklad.kulka_get)/2)):
+            k1, k2, k3 = ran.randrange(255), ran.randrange(255), ran.randrange(255)
+            self.kolory.append((k1, k2, k3))
+            self.kolory.append((k1, k2, k3))
         
     def run(self):
         for j in range(15):
@@ -65,13 +67,13 @@ class Symulacje():
                 f = np.zeros((len(self.__uklad.kulka_get), self.__uklad.dim_get))
                 for p in self.__potencjal:
                     f += p.calc_forces(self.__uklad)
-                self.__algorytm.ruch(f, self.__uklad.kulka_get)
+                self.__algorytm.ruch(f, self.__uklad)
             print('calc energy...')
             e = np.zeros((len(self.__uklad.kulka_get), self.__uklad.dim_get))
             for p in self.__potencjal:
                 e += p.calc_energy(self.__uklad)
             self.__uklad.energy_set(e)
-            self.__uklad.T_set(self.__uklad.T_get + 25)
+            self.__uklad.T_set(self.__uklad.T_get*5)
         # testtuje
         return True
     
@@ -101,28 +103,44 @@ class Symulacje():
             for p in self.__potencjal:
                 f += p.calc_forces(self.__uklad)
 #            print(f)
-            self.__algorytm.ruch(f, self.__uklad.kulka_get)
-            
+            self.__algorytm.ruch(f, self.__uklad)
+            e = np.zeros((len(self.__uklad.kulka_get), self.__uklad.dim_get))
+            for p in self.__potencjal:
+                e += p.calc_energy(self.__uklad)
+            self.__uklad.energy_set(e)
+            self.__uklad.T_set(self.__uklad.T_get+1000)
+            plt.scatter(self.__uklad.T_get, np.mean(self.__uklad.energy_get))
+            plt.show()
             #ticking
             self.tps_delta += self.tps_clock.tick()/1000.0
             
             #rendering
             self.window.fill((0,0,0))
-            self.draw()
+            self.draw(self.window)
             pygame.display.flip()
     
-    def draw(self):
+    def draw(self, window):
         #rysuje
         odl_pom = self.__uklad.kulka_get[-2].pos_get_all[0][0] / ((len(kulki)/2)**(1/2) - 1)
         for atom, kolor in zip(self.__uklad.kulka_get, self.kolory):
-#            print(atom.pos_get[0], atom.pos_get[1])
+#            print(atom.pos_get[0]+odl_pom/2, atom.pos_get[1]+odl_pom/2, 3.5, 3.5)
             postac = pygame.Rect(atom.pos_get[0]+odl_pom/2, atom.pos_get[1]+odl_pom/2, 3.5, 3.5)
             pygame.draw.rect(self.window, kolor, postac)
 #        self.player3.prostokat()
+        kol = (255, 255, 255)
+        font = pygame.font.SysFont(None, 48)
+        self.pisanie_tekstu(('T: %s' % (self.__uklad.T_get)), font, window, 10, 0, kol)
+        self.pisanie_tekstu(('E: %s' % (np.mean(self.__uklad.energy_get))), font, window, 10, 50, kol)
+            
+    def pisanie_tekstu(self, tekst, czcionka, powierzchnia, x, y, kolor):
+        tekst_obiekt = czcionka.render(tekst, 1, kolor)
+        tekst_prostokat = tekst_obiekt.get_rect()
+        tekst_prostokat.topleft = (x, y)
+        powierzchnia.blit(tekst_obiekt, tekst_prostokat)
     
 if __name__ == "__main__":
     kulki = []
-    n = 5
+    n = 10
     x = 15
     id = 0
     for i in range(n):
@@ -134,15 +152,15 @@ if __name__ == "__main__":
     print('ilosc atomow =', id)
     
     impac = {'Har' : impacts(kulki, key='molecule'), 'Lj' : impacts(kulki, key='von Neumanna')}
-    uklad = Uklad(kulki, dim = len(kulki[0].pos_get), T = 1, imp = impac)
+    uklad = Uklad(kulki, dim = len(kulki[0].pos_get),tarcie = 0.9, T = 1, imp = impac)
     
     # tworzenie listy potencjalow
     pot = []
     pot.append(Har(k = 1, x0 = x))
-#    pot.append(Lv(tarcie=0.3))
+    pot.append(Lv())
     pot.append(Lj(r0 = x/3, eps=10))
-    uklad.kulka_get[-2].pos_set(uklad.kulka_get[-2].pos_get - np.array([30,30]))
-    uklad.kulka_get[-1].pos_set(uklad.kulka_get[-1].pos_get - np.array([15,30]))
+#    uklad.kulka_get[-2].pos_set(uklad.kulka_get[-2].pos_get - np.array([30,30]))
+#    uklad.kulka_get[-1].pos_set(uklad.kulka_get[-1].pos_get - np.array([15,30]))
     alg = LF()
     sym = Symulacje(uklad, pot, alg, steps=1000)
     # symulacja z wizualizacja
@@ -163,6 +181,6 @@ if __name__ == "__main__":
     for i in range(len(kulki)):
         lista_pos.append(kulki[i].pos_get_all)
 #    print(lista_pos)
-#    ds(lista_pos)
+    ds(lista_pos)
     
     

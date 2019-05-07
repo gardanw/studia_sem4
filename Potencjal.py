@@ -73,21 +73,25 @@ class Harmoniczny(Potencjal):
 
             f[k1.id_get] += -self.__k*(d - self.__x0)*v
             f[k2.id_get] += self.__k*(d - self.__x0)*v
+#        print('har',f)
         return f
     
 class Langevin(Potencjal):
-    def __init__(self, tarcie = 1):
-        self.__tarcie = tarcie
+    def __init__(self, t = 1):
+        self.__t = t
         
     def calc_energy(self, uklad):
         return np.zeros((len(uklad.kulka_get), uklad.dim_get))
     
     def calc_forces(self, uklad):
         kb = K*Na
+        tarcie = uklad.tar_get
         f = np.zeros((len(uklad.kulka_get), uklad.dim_get))
         for i in range(len(uklad.kulka_get)):
             for j in range(uklad.dim_get):
-                f[i][j] = np.sqrt(2*self.__tarcie*kb*uklad.T_get)*ran.gauss(0, 1)
+#                print(np.sqrt(2*self.__tarcie*kb*uklad.T_get)*ran.gauss(0, 1),'self.__tarcie',self.__tarcie,'kb',kb,'uklad.T_get',uklad.T_get, 'ran.gauss(0, 1)',ran.gauss(0, 1))
+                f[i][j] = np.sqrt(2*tarcie*kb*uklad.T_get)*ran.gauss(0, 1)
+#        print('lan', f)
         return f
 
 class LennardJones(Potencjal):
@@ -141,4 +145,5 @@ class LennardJones(Potencjal):
             v = r/d
             f[k1.id_get] += 4*self.__eps*(12*(self.__r0/d)**12 - 6*(self.__r0/d)**6)*v
             f[k2.id_get] += -4*self.__eps*(12*(self.__r0/d)**12 - 6*(self.__r0/d)**6)*v
+#        print('lj', f)
         return f
