@@ -81,7 +81,11 @@ class Langevin(Potencjal):
         self.__t = t
         
     def calc_energy(self, uklad):
-        return np.zeros((len(uklad.kulka_get), uklad.dim_get))
+        e = np.zeros((len(uklad.kulka_get), uklad.dim_get))
+        for i in uklad.kulka_get:
+            epom = (1/2)*i.m_get*i.ver_get
+            e[i.id_get] += epom
+        return e
     
     def calc_forces(self, uklad):
         kb = K*Na
@@ -130,6 +134,8 @@ class LennardJones(Potencjal):
             k1, k2 = i[0], i[1]
             lista_r = []
             r = k1.pos_get-k2.pos_get
+            if np.linalg.norm(r) >= 60:
+                continue
             lista_r.append(r)
             lista_r.append(k1.pos_get-(k2.pos_get + np.array([0, uklad.kulka_get[-2].pos_get_all[0][1] + odl_pom])))
             lista_r.append(k1.pos_get-(k2.pos_get - np.array([0, uklad.kulka_get[-2].pos_get_all[0][1] + odl_pom])))
@@ -140,6 +146,7 @@ class LennardJones(Potencjal):
                 lista_d.append(np.linalg.norm(lista_r[i]))
 
             d = min(lista_d)
+            
             ind = lista_d.index(d)
             r = lista_r[ind]
             v = r/d

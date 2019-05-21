@@ -40,6 +40,11 @@ class Kulka():
     def id_get(self):
         idk = self.__idk
         return idk
+    
+    @property
+    def m_get(self):
+        ma = self.__masa
+        return ma
 
 if __name__ == "__main__":
     kulka = Kulka(np.array([1]), 7, np.array([1]))

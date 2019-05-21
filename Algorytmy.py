@@ -28,7 +28,7 @@ class LeapFrog(Algorytmy):
         for j in range(len(uklad.kulka_get)):
             new_ver = uklad.kulka_get[j].ver_get + f[j]*self.__dt
 #            print('0', new_ver)
-            new_ver = new_ver * -1 * uklad.tar_get
+#            new_ver = new_ver * -1 * uklad.tar_get
 #            print('1',new_ver)
             new_pos = uklad.kulka_get[j].pos_get + new_ver*self.__dt
          

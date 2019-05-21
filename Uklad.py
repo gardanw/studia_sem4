@@ -9,7 +9,7 @@ class Uklad():
         self.__dim = dim
         self.__T = [T]
         self.__imp = imp
-        self.__energy = [np.zeros((len(self.__lista_kulek), self.__dim))]
+        self.__energy = []
         self.__tarcie = tarcie
     
     def __iter__(self):

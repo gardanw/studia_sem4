@@ -60,22 +60,27 @@ class Symulacje():
             self.kolory.append((k1, k2, k3))
         
     def run(self):
-        for j in range(15):
-            print('run...', j)
-            print('calc forces...')
-            for i in range(self.__steps):
-                f = np.zeros((len(self.__uklad.kulka_get), self.__uklad.dim_get))
-                for p in self.__potencjal:
-                    f += p.calc_forces(self.__uklad)
-                self.__algorytm.ruch(f, self.__uklad)
-            print('calc energy...')
+        print('run...', j)
+        print('calc forces...')
+        for i in range(self.__steps):
+            f = np.zeros((len(self.__uklad.kulka_get), self.__uklad.dim_get))
             e = np.zeros((len(self.__uklad.kulka_get), self.__uklad.dim_get))
             for p in self.__potencjal:
+                f += p.calc_forces(self.__uklad)
                 e += p.calc_energy(self.__uklad)
+            self.__algorytm.ruch(f, self.__uklad)
+#        print('calc energy...')
+#        
+#        for p in self.__potencjal:
+#            e += p.calc_energy(self.__uklad)
             self.__uklad.energy_set(e)
-            self.__uklad.T_set(self.__uklad.T_get*5)
+#        self.__uklad.T_set(self.__uklad.T_get+100)
+        ene = []
+        for i in range(len(self.__uklad.energy_get)):
+            ene.append(np.mean(uklad.energy_get[i]))
+        mean_e = np.mean(ene)
         # testtuje
-        return True
+        return mean_e
     
     def drawrun(self):
         
@@ -108,7 +113,7 @@ class Symulacje():
             for p in self.__potencjal:
                 e += p.calc_energy(self.__uklad)
             self.__uklad.energy_set(e)
-            self.__uklad.T_set(self.__uklad.T_get+1000)
+            self.__uklad.T_set(self.__uklad.T_get+100000)
             plt.scatter(self.__uklad.T_get, np.mean(self.__uklad.energy_get))
             plt.show()
             #ticking
@@ -139,48 +144,49 @@ class Symulacje():
         powierzchnia.blit(tekst_obiekt, tekst_prostokat)
     
 if __name__ == "__main__":
-    kulki = []
-    n = 10
-    x = 15
-    id = 0
-    for i in range(n):
-        for j in range(n):
-            kulki.append(Kulka(np.array([j*3*x, i*3*x]), 1, np.array([0,0]), idk = id))
-            id += 1
-            kulki.append(Kulka(np.array([j*3*x+x, i*3*x]), 1, np.array([0,0]), idk = id))
-            id += 1
-    print('ilosc atomow =', id)
-    
-    impac = {'Har' : impacts(kulki, key='molecule'), 'Lj' : impacts(kulki, key='von Neumanna')}
-    uklad = Uklad(kulki, dim = len(kulki[0].pos_get),tarcie = 0.9, T = 1, imp = impac)
-    
-    # tworzenie listy potencjalow
-    pot = []
-    pot.append(Har(k = 1, x0 = x))
-    pot.append(Lv())
-    pot.append(Lj(r0 = x/3, eps=10))
-#    uklad.kulka_get[-2].pos_set(uklad.kulka_get[-2].pos_get - np.array([30,30]))
-#    uklad.kulka_get[-1].pos_set(uklad.kulka_get[-1].pos_get - np.array([15,30]))
-    alg = LF()
-    sym = Symulacje(uklad, pot, alg, steps=1000)
-    # symulacja z wizualizacja
-    
-    sym.drawrun()
-    
-    # symulacja bez wizualizacji
-    sym.run()
-    print('end...')
     e = []
-    for i in range(len(uklad.energy_get)):
-        e.append(np.mean(uklad.energy_get[i]))
-    plt.plot(np.array(uklad.T_get_all), np.array(e))
+    temperature = [0,100,200,300,400]
+    for t in range(5):
+        kulki = []
+        n = 3
+        x = 15
+        id = 0
+        for i in range(n):
+            for j in range(n):
+                kulki.append(Kulka(np.array([j*3*x, i*3*x]), 1, np.array([0,0]), idk = id))
+                id += 1
+                kulki.append(Kulka(np.array([j*3*x+x, i*3*x]), 1, np.array([0,0]), idk = id))
+                id += 1
+        print('ilosc atomow =', id)
+        
+        impac = {'Har' : impacts(kulki, key='molecule'), 'Lj' : impacts(kulki, key='all')}
+        uklad = Uklad(kulki, dim = len(kulki[0].pos_get),tarcie = 0.9, T = temperature[t], imp = impac)
+        
+        # tworzenie listy potencjalow
+        pot = []
+        pot.append(Har(k = 1, x0 = x))
+        pot.append(Lv())
+        pot.append(Lj(r0 = x/3, eps=10))
+        alg = LF()
+        sym = Symulacje(uklad, pot, alg, steps=10000)
+        # symulacja z wizualizacja
+        
+    #    sym.drawrun()
+        
+        # symulacja bez wizualizacji
+        e.append(sym.run())
+        print('end...')
+#        e = []
+#        for i in range(len(uklad.energy_get)):
+#            e.append(np.mean(uklad.energy_get[i]))
+        
+    #    print(np.mean(uklad.energy_get[1]))
+        # wizualizacja po symylacji
+#        lista_pos = []
+#        for i in range(len(kulki)):
+#            lista_pos.append(kulki[i].pos_get_all)
+#    #    print(lista_pos)
+#        ds(lista_pos)
+    plt.plot(np.array(temperature), np.array(e))
     plt.show()
-#    print(np.mean(uklad.energy_get[1]))
-    # wizualizacja po symylacji
-    lista_pos = []
-    for i in range(len(kulki)):
-        lista_pos.append(kulki[i].pos_get_all)
-#    print(lista_pos)
-    ds(lista_pos)
-    
     
