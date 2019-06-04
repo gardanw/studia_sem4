@@ -3,10 +3,11 @@
 from Mer import Mer
 
 class Siatak():
-    def __init__(self, n = 10, E = 0):
+    def __init__(self, T = 300, n = 10, E = 0):
         self.n = n
         self.__E = E
         self.__siatka = []
+        self.__T = T
         for i in range(n):
             pom = []
             for j in range(n):
@@ -30,6 +31,14 @@ class Siatak():
     
     def energy_set(self, new_energy):
         self.__E = new_energy
+        
+    @property
+    def T_get(self):
+        Te = self.__T
+        return Te
+    
+    def T_set(self, new_T):
+        self.__T = new_T
 if __name__ == "__main__":
     s = Siatak(n = 25)
     temp = s.siatka_get

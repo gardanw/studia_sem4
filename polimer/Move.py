@@ -34,26 +34,26 @@ class Move():
         print('ogon')
         
     def reptacja(self, los_mer, temp, polimer):
-        if los_mer.id_get == 1:
+        if los_mer.nei_get[0] == None:
             mer_pom = polimer[-1]
-            for i in polimer:
-                if i.id_get == 1:
-                    i.id_set(len(polimer))
-                else:
-                    i.id_set(i.id_get - 1)
+#            for i in polimer:
+#                if i.id_get == 1:
+#                    i.id_set(len(polimer))
+#                else:
+#                    i.id_set(i.id_get - 1)
             pom = polimer.pop(0)
             polimer.append(pom)
             polimer[0].nei_set([None, polimer[1]])
             polimer[1].nei_set([polimer[0],polimer[2]])
             polimer[-2].nei_set([polimer[-3], polimer[-1]])
             polimer[-1].nei_set([polimer[-2], None])
-        elif los_mer.id_get == len(polimer):
+        elif los_mer.nei_get[1] == None:
             mer_pom = polimer[0]
-            for i in polimer:
-                if i.id_get == len(polimer):
-                    i.id_set(1)
-                else:
-                    i.id_set(i.id_get + 1)
+#            for i in polimer:
+#                if i.id_get == len(polimer):
+#                    i.id_set(1)
+#                else:
+#                    i.id_set(i.id_get + 1)
             pom = polimer.pop(-1)
             polimer.insert(0,pom)
             polimer[0].nei_set([None, polimer[1]])

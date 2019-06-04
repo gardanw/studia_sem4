@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import random as ran
+import numpy as np
 n = 10
+T = 300
 siatka = []
 for i in range(n):
     linia = []
@@ -74,6 +76,12 @@ for k in range(len(siatka)**2):
         H = H_new[:]
         suma = suma_new
         siatka = siatka_new[:]
+    else:
+        prawdo = ran.random()
+        if prawdo > np.exp(-(suma_new - suma)/T):
+            H = H_new[:]
+            suma = suma_new
+            siatka = siatka_new[:]
 print(suma)
 for i in H:
     print(i)

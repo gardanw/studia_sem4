@@ -31,39 +31,66 @@ class Symulacja():
         self.__ruchy = ruchy
     
     def sym(self):
-        temp = self.__siatka.siatka_get
-        los_mer = np.random.choice(self.__polimer)
-        
-        if None in los_mer.nei_get:
-            x = [0,1]
-            los_x = np.random.choice(x)
-            if los_x == 0:
-                self.__ruchy.ogon(los_mer, temp)
-            elif los_x == 1:
-                self.__ruchy.reptacja(los_mer, temp, self.__polimer)
-        elif None not in los_mer.nei_get:
-            flaga = False
-            flaga = self.__ruchy.rog(los_mer, temp)
-            if flaga == False:
-                self.__ruchy.petla(los_mer, temp)
-        matrix = matrix_nei(polimer)
-        for i in matrix:
-            print(i)
-        uklad = []
-        for i in range(len(temp)):
-            pom = []
-            for j in range(len(temp[i])):
-                if temp[i][j] == None:
-                    pom.append(0)
-                else:
-                    pom.append(temp[i][j].id_get)
-            uklad.append(pom)
-        for i in uklad:
-            print(i)
+        for step in range(50):
+            print(step)
+            temp = self.__siatka.siatka_get
+            temp_polimer = self.__polimer[:]
+            los_mer = np.random.choice(temp_polimer)
+            
+            if None in los_mer.nei_get:
+                x = [0,1]
+                los_x = np.random.choice(x)
+                if los_x == 0:
+                    self.__ruchy.ogon(los_mer, temp)
+                elif los_x == 1:
+                    self.__ruchy.reptacja(los_mer, temp, temp_polimer)
+            elif None not in los_mer.nei_get:
+                flaga = False
+                flaga = self.__ruchy.rog(los_mer, temp)
+                if flaga == False:
+                    self.__ruchy.petla(los_mer, temp)
+            matrix = matrix_nei(temp_polimer)
+            for i in matrix:
+                print(i)
+            energy = 0
+            for i in matrix:
+                energy += sum(i)
+            energy -= 2*(len(matrix)-1)
+            
+            if energy <= self.__siatka.energy_get:
+                self.__siatka.siatka_set(temp)
+                
+                self.__polimer = temp_polimer
+                matrix = matrix_nei(self.__polimer)
+                for i in matrix:
+                    print(i)
+                print("zamiana")
+                
+            elif energy > self.__siatka.energy_get:
+                prawdo = ran.random()
+                if prawdo > np.exp(-(energy - self.__siatka.energy_get)/self.__siatka.T_get):
+                    self.__siatka.siatka_set(temp)
+                    self.__polimer = temp_polimer
+                    matrix = matrix_nei(self.__polimer)
+                    for i in matrix:
+                        print(i)
+                    print("zamiana")
+            
+            uklad = []
+            for i in range(len(self.__siatka.siatka_get)):
+                pom = []
+                for j in range(len(self.__siatka.siatka_get[i])):
+                    if self.__siatka.siatka_get[i][j] == None:
+                        pom.append(0)
+                    else:
+                        pom.append(self.__siatka.siatka_get[i][j].id_get)
+                uklad.append(pom)
+            for i in uklad:
+                print(i)
             
             
 if __name__ == "__main__":
-    s = Siatak(n = 10)
+    s = Siatak(T = 10, n = 10)
     temp = s.siatka_get
     polimer = []
     m0 = Mer(np.array([int(s.n/2), int(s.n/2)]), id = 1)
