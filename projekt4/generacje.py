@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import numpy as np
+import matplotlib.pyplot as plt
 
 def gener(populacja_nowa, reg, f = False):
     for j in range(len(populacja_nowa)):
@@ -46,8 +47,8 @@ for i in range(len(reg)):
         slownik[stany[j]] = reg[i][j]
     reg[i] = slownik
 
-
-for generacje in range(10):
+scoress = []
+for generacje in range(50):
     populacje_po = []
     for i in range(len(reg)):
         populacja_nowa = populacja[:]
@@ -59,7 +60,6 @@ for generacje in range(10):
         populacje_po.append(populacja_nowa)
     
     for i in range(len(reg)):
-        score = []
         s = 0
         for j in range(len(reg[i]['populacja_po'])):
             if j != len(reg[i]['populacja_po']) - 1:
@@ -69,14 +69,15 @@ for generacje in range(10):
                 if reg[i]['populacja_po'][j-1] != reg[i]['populacja_po'][j] and reg[i]['populacja_po'][0] != reg[i]['populacja_po'][j]:
                     s += 1
         reg[i]['score'] = s
-
+    
     score = []
     for i in reg:
         score.append(i['score'])
     while len(reg) > 4:
         reg.pop(score.index(min(score)))
         score.pop(score.index(min(score)))
-    
+    for i in reg:
+        scoress.append(i['score'])
     mutacja = np.random.choice(stany)
     reg_mut = copy.deepcopy(np.random.choice(reg))
     if reg_mut[mutacja] == '0':
@@ -115,3 +116,5 @@ print(populacja_nowa)
 for i in range(500):
     populacja_nowa = gener(populacja_nowa, reg_naj)
     print(populacja_nowa)
+
+plt.plot(scoress)
