@@ -40,20 +40,9 @@ class Move():
     def reptacja(self, los_mer, temp, polimer):
         if los_mer.nei_get[0] == None:
             mer_pom = polimer[-1]
-            pom = polimer.pop(0)
-            polimer.append(pom)
-            polimer[0].nei_set([None, polimer[1]])
-            polimer[1].nei_set([polimer[0],polimer[2]])
-            polimer[-2].nei_set([polimer[-3], polimer[-1]])
-            polimer[-1].nei_set([polimer[-2], None])
         elif los_mer.nei_get[1] == None:
             mer_pom = polimer[0]
-            pom = polimer.pop(-1)
-            polimer.insert(0,pom)
-            polimer[0].nei_set([None, polimer[1]])
-            polimer[1].nei_set([polimer[0], polimer[2]])
-            polimer[-2].nei_set([polimer[-3], polimer[-1]])
-            polimer[-1].nei_set([polimer[-2], None])
+            
         los = []
         if temp[mer_pom.pos_get[0] - 1][mer_pom.pos_get[1]] == None:
             los.append(0)
@@ -68,6 +57,21 @@ class Move():
             text = 'nie mozna wykonac ruchu'
             return text
         
+        if los_mer.nei_get[0] == None:
+            pom = polimer.pop(0)
+            polimer.append(pom)
+            polimer[0].nei_set([None, polimer[1]])
+            polimer[1].nei_set([polimer[0],polimer[2]])
+            polimer[-2].nei_set([polimer[-3], polimer[-1]])
+            polimer[-1].nei_set([polimer[-2], None])
+        elif los_mer.nei_get[1] == None:
+            pom = polimer.pop(-1)
+            polimer.insert(0,pom)
+            polimer[0].nei_set([None, polimer[1]])
+            polimer[1].nei_set([polimer[0], polimer[2]])
+            polimer[-2].nei_set([polimer[-3], polimer[-1]])
+            polimer[-1].nei_set([polimer[-2], None])
+            
         los_pos = np.random.choice(los)
         pom_pos = los_mer.pos_get
         if los_pos == 0:
