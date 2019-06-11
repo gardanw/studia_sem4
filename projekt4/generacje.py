@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import matplotlib.pyplot as plt
+import copy
 
 def gener(populacja_nowa, reg, f = False):
     for j in range(len(populacja_nowa)):
@@ -48,7 +49,7 @@ for i in range(len(reg)):
     reg[i] = slownik
 
 scoress = []
-for generacje in range(50):
+for generacje in range(100):
     populacje_po = []
     for i in range(len(reg)):
         populacja_nowa = populacja[:]
@@ -110,11 +111,16 @@ for i in reg:
     score.append(i['score'])
 
 reg_naj = reg[score.index(max(score))]
-print(reg_naj)
+
 populacja_nowa = populacja
 print(populacja_nowa)
-for i in range(500):
+for i in range(30):
     populacja_nowa = gener(populacja_nowa, reg_naj)
     print(populacja_nowa)
 
+naj = []
+for i in stany:
+    naj.append(reg_naj[i])
+
+print('najlepsza = ',''.join(naj))
 plt.plot(scoress)
