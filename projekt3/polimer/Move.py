@@ -19,8 +19,12 @@ class Move():
         if temp[mer_pom.pos_get[0]][mer_pom.pos_get[1] + 1] == None:
             los.append(3)
             
+        if len(los) == 0:
+            text = 'nie mozna wykonac ruchu'
+            return text
         los_pos = np.random.choice(los)
-        pom_pos = los_mer.pos_get
+        temp[los_mer.pos_get[0]][los_mer.pos_get[1]] = None
+#        pom_pos = los_mer.pos_get
         if los_pos == 0:
             los_mer.pos_set(np.array([mer_pom.pos_get[0] - 1, mer_pom.pos_get[1]]))
         elif los_pos == 1:
@@ -30,17 +34,12 @@ class Move():
         elif los_pos == 3:
             los_mer.pos_set(np.array([mer_pom.pos_get[0], mer_pom.pos_get[1] + 1]))
         temp[los_mer.pos_get[0]][los_mer.pos_get[1]] = los_mer
-        temp[pom_pos[0]][pom_pos[1]] = None
-        print('ogon')
+#        temp[pom_pos[0]][pom_pos[1]] = None
+#        print('ogon')
         
     def reptacja(self, los_mer, temp, polimer):
         if los_mer.nei_get[0] == None:
             mer_pom = polimer[-1]
-#            for i in polimer:
-#                if i.id_get == 1:
-#                    i.id_set(len(polimer))
-#                else:
-#                    i.id_set(i.id_get - 1)
             pom = polimer.pop(0)
             polimer.append(pom)
             polimer[0].nei_set([None, polimer[1]])
@@ -49,11 +48,6 @@ class Move():
             polimer[-1].nei_set([polimer[-2], None])
         elif los_mer.nei_get[1] == None:
             mer_pom = polimer[0]
-#            for i in polimer:
-#                if i.id_get == len(polimer):
-#                    i.id_set(1)
-#                else:
-#                    i.id_set(i.id_get + 1)
             pom = polimer.pop(-1)
             polimer.insert(0,pom)
             polimer[0].nei_set([None, polimer[1]])
@@ -69,7 +63,11 @@ class Move():
             los.append(2)
         if temp[mer_pom.pos_get[0]][mer_pom.pos_get[1] + 1] == None:
             los.append(3)
-            
+        
+        if len(los) == 0:
+            text = 'nie mozna wykonac ruchu'
+            return text
+        
         los_pos = np.random.choice(los)
         pom_pos = los_mer.pos_get
         if los_pos == 0:
@@ -83,7 +81,8 @@ class Move():
         temp[los_mer.pos_get[0]][los_mer.pos_get[1]] = los_mer
         temp[pom_pos[0]][pom_pos[1]] = None
         
-        print('reptacja')
+        
+#        print('reptacja')
         
     def rog(self, los_mer, temp):
         pom_pos = los_mer.pos_get
@@ -93,7 +92,7 @@ class Move():
                 temp[los_mer.pos_get[0] + 1][los_mer.pos_get[1] + 1] = los_mer
                 temp[pom_pos[0]][pom_pos[1]] = None
                 los_mer.pos_set(np.array([los_mer.pos_get[0] + 1,los_mer.pos_get[1] + 1]))
-                print('rog')
+#                print('rog')
                 return True
         elif (los_mer.nei_get[0].pos_get[0] == los_mer.pos_get[0] - 1 and los_mer.nei_get[1].pos_get[1] == los_mer.pos_get[1] + 1
               or los_mer.nei_get[1].pos_get[0] == los_mer.pos_get[0] - 1 and los_mer.nei_get[0].pos_get[1] == los_mer.pos_get[1] + 1):
@@ -101,7 +100,7 @@ class Move():
                 temp[los_mer.pos_get[0] - 1][los_mer.pos_get[1] + 1] = los_mer
                 temp[pom_pos[0]][pom_pos[1]] = None
                 los_mer.pos_set(np.array([los_mer.pos_get[0] - 1,los_mer.pos_get[1] + 1]))
-                print('rog')
+#                print('rog')
                 return True
         elif (los_mer.nei_get[0].pos_get[0] == los_mer.pos_get[0] + 1 and los_mer.nei_get[1].pos_get[1] == los_mer.pos_get[1] - 1
               or los_mer.nei_get[1].pos_get[0] == los_mer.pos_get[0] + 1 and los_mer.nei_get[0].pos_get[1] == los_mer.pos_get[1] - 1):
@@ -109,7 +108,7 @@ class Move():
                 temp[los_mer.pos_get[0] + 1][los_mer.pos_get[1] - 1] = los_mer
                 temp[pom_pos[0]][pom_pos[1]] = None
                 los_mer.pos_set(np.array([los_mer.pos_get[0] + 1,los_mer.pos_get[1] - 1]))
-                print('rog')
+#                print('rog')
                 return True
         elif (los_mer.nei_get[0].pos_get[0] == los_mer.pos_get[0] - 1 and los_mer.nei_get[1].pos_get[1] == los_mer.pos_get[1] - 1
               or los_mer.nei_get[1].pos_get[0] == los_mer.pos_get[0] - 1 and los_mer.nei_get[0].pos_get[1] == los_mer.pos_get[1] - 1):
@@ -117,34 +116,10 @@ class Move():
                 temp[los_mer.pos_get[0] - 1][los_mer.pos_get[1] - 1] = los_mer
                 temp[pom_pos[0]][pom_pos[1]] = None
                 los_mer.pos_set(np.array([los_mer.pos_get[0] - 1,los_mer.pos_get[1] - 1]))
-                print('rog')
+#                print('rog')
                 return True
             
     def petla(self, los_mer, temp):
-#        if (los_mer.pos_get[1] == los_mer.nei_get[0].pos_get[1]
-#        and los_mer.pos_get[0] == los_mer.nei_get[1].pos_get[0]
-#        and los_mer.nei_get[1].pos_get[1] == los_mer.nei_get[1].nei_get[1].pos_get[1]):
-#            if temp[los_mer.pos_get[0]+2][los_mer.pos_get[1]] == None and temp[los_mer.pos_get[0]+2][los_mer.pos_get[1]+1] == None:
-#                pos_pom = los_mer.pos_get
-#                temp[los_mer.pos_get[0]+2][los_mer.pos_get[1]] = los_mer
-#                temp[los_mer.pos_get[0]+2][los_mer.pos_get[1]+1] = los_mer.nei_get[1]
-#                los_mer.pos_set(np.array([los_mer.pos_get[0]+2,los_mer.pos_get[1]]))
-#                los_mer.nei_get[1].pos_set(np.array([los_mer.pos_get[0]+2,los_mer.pos_get[1]+1]))
-#                temp[pos_pom[0]][pos_pom[1]] = None
-#                temp[pos_pom[0]][pos_pom[1]+1] = None
-#                print('petla')
-#        if (los_mer.pos_get[1] == los_mer.nei_get[0].pos_get[1]
-#        and los_mer.pos_get[0] == los_mer.nei_get[1].pos_get[0]
-#        and los_mer.nei_get[1].pos_get[1] == los_mer.nei_get[1].nei_get[1].pos_get[1]):
-#            if temp[los_mer.pos_get[0]-2][los_mer.pos_get[1]] == None and temp[los_mer.pos_get[0]-2][los_mer.pos_get[1]+1] == None:
-#                pos_pom = los_mer.pos_get
-#                temp[los_mer.pos_get[0]-2][los_mer.pos_get[1]] = los_mer
-#                temp[los_mer.pos_get[0]-2][los_mer.pos_get[1]+1] = los_mer.nei_get[1]
-#                los_mer.pos_set(np.array([los_mer.pos_get[0]-2,los_mer.pos_get[1]]))
-#                los_mer.nei_get[1].pos_set(np.array([los_mer.pos_get[0]-2,los_mer.pos_get[1]+1]))
-#                temp[pos_pom[0]][pos_pom[1]] = None
-#                temp[pos_pom[0]][pos_pom[1]+1] = None
-#                print('petla')
         if (los_mer.pos_get[0] == los_mer.nei_get[0].pos_get[0] + 1
             and los_mer.pos_get[1] == los_mer.nei_get[0].pos_get[1]
             and los_mer.pos_get[0] == los_mer.nei_get[1].pos_get[0]
@@ -159,7 +134,7 @@ class Move():
             temp[los_mer.pos_get[0]][los_mer.pos_get[1]+1] = None
             los_mer.pos_set(np.array([los_mer.pos_get[0]+2,los_mer.pos_get[1]]))
             los_mer.nei_get.pos_set(np.array([los_mer.pos_get[0],los_mer.pos_get[1]+1]))
-            print('petla')
+#            print('petla')
         elif (los_mer.pos_get[0] == los_mer.nei_get[0].pos_get[0]
             and los_mer.pos_get[1] == los_mer.nei_get[0].pos_get[1] - 1
             and los_mer.pos_get[0] == los_mer.nei_get[1].pos_get[0] + 1
@@ -174,7 +149,7 @@ class Move():
             temp[los_mer.pos_get[0]][los_mer.pos_get[1]-1] = None
             los_mer.pos_set(np.array([los_mer.pos_get[0]+2,los_mer.pos_get[1]]))
             los_mer.nei_get.pos_set(np.array([los_mer.pos_get[0],los_mer.pos_get[1]-1]))
-            print('petla')
+#            print('petla')
         elif (los_mer.pos_get[0] == los_mer.nei_get[0].pos_get[0] - 1
             and los_mer.pos_get[1] == los_mer.nei_get[0].pos_get[1]
             and los_mer.pos_get[0] == los_mer.nei_get[1].pos_get[0]
@@ -189,7 +164,7 @@ class Move():
             temp[los_mer.pos_get[0]][los_mer.pos_get[1]+1] = None
             los_mer.pos_set(np.array([los_mer.pos_get[0]-2,los_mer.pos_get[1]]))
             los_mer.nei_get.pos_set(np.array([los_mer.pos_get[0],los_mer.pos_get[1]+1]))
-            print('petla')
+#            print('petla')
         elif (los_mer.pos_get[0] == los_mer.nei_get[0].pos_get[0]
             and los_mer.pos_get[1] == los_mer.nei_get[0].pos_get[1] - 1
             and los_mer.pos_get[0] == los_mer.nei_get[1].pos_get[0] - 1
@@ -204,7 +179,7 @@ class Move():
             temp[los_mer.pos_get[0]][los_mer.pos_get[1]-1] = None
             los_mer.pos_set(np.array([los_mer.pos_get[0]-2,los_mer.pos_get[1]]))
             los_mer.nei_get.pos_set(np.array([los_mer.pos_get[0],los_mer.pos_get[1]-1]))
-            print('petla')
+#            print('petla')
         elif (los_mer.pos_get[0] == los_mer.nei_get[0].pos_get[0]
             and los_mer.pos_get[1] == los_mer.nei_get[0].pos_get[1] + 1
             and los_mer.pos_get[0] == los_mer.nei_get[1].pos_get[0] - 1
@@ -219,7 +194,7 @@ class Move():
             temp[los_mer.pos_get[0]-1][los_mer.pos_get[1]] = None
             los_mer.pos_set(np.array([los_mer.pos_get[0],los_mer.pos_get[1]+2]))
             los_mer.nei_get.pos_set(np.array([los_mer.pos_get[0]-1,los_mer.pos_get[1]]))
-            print('petla')
+#            print('petla')
         elif (los_mer.pos_get[0] == los_mer.nei_get[0].pos_get[0] + 1
             and los_mer.pos_get[1] == los_mer.nei_get[0].pos_get[1]
             and los_mer.pos_get[0] == los_mer.nei_get[1].pos_get[0]
@@ -234,7 +209,7 @@ class Move():
             temp[los_mer.pos_get[0]+1][los_mer.pos_get[1]] = None
             los_mer.pos_set(np.array([los_mer.pos_get[0],los_mer.pos_get[1]+2]))
             los_mer.nei_get.pos_set(np.array([los_mer.pos_get[0]+1,los_mer.pos_get[1]]))
-            print('petla')
+#            print('petla')
         elif (los_mer.pos_get[0] == los_mer.nei_get[0].pos_get[0]
             and los_mer.pos_get[1] == los_mer.nei_get[0].pos_get[1] - 1
             and los_mer.pos_get[0] == los_mer.nei_get[1].pos_get[0] + 1
@@ -249,7 +224,7 @@ class Move():
             temp[los_mer.pos_get[0]+1][los_mer.pos_get[1]] = None
             los_mer.pos_set(np.array([los_mer.pos_get[0],los_mer.pos_get[1]-2]))
             los_mer.nei_get.pos_set(np.array([los_mer.pos_get[0]+1,los_mer.pos_get[1]]))
-            print('petla')
+#            print('petla')
         elif (los_mer.pos_get[0] == los_mer.nei_get[0].pos_get[0] - 1
             and los_mer.pos_get[1] == los_mer.nei_get[0].pos_get[1]
             and los_mer.pos_get[0] == los_mer.nei_get[1].pos_get[0]
@@ -264,4 +239,4 @@ class Move():
             temp[los_mer.pos_get[0]-1][los_mer.pos_get[1]] = None
             los_mer.pos_set(np.array([los_mer.pos_get[0],los_mer.pos_get[1]-2]))
             los_mer.nei_get.pos_set(np.array([los_mer.pos_get[0]-1,los_mer.pos_get[1]]))
-            print('petla')
+#            print('petla')

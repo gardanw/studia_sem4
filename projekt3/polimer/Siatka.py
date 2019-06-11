@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from Mer import Mer
+import copy
 
 class Siatak():
     def __init__(self, T = 300, n = 10, E = 0):
@@ -18,7 +19,7 @@ class Siatak():
     def siatka_get(self):
         siatka = []
         for i in self.__siatka:
-            siatka.append(i[:])
+            siatka.append(copy.deepcopy(i))
         return siatka
     
     def siatka_set(self, new_siatka):

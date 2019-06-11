@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import numpy as np
+
 
 class Mer():
     def __init__(self, pos, id, neighbor = [None, None]):
         self.__pos = pos
         self.__neighbor = neighbor
         self.__id = id
+        self.__spin = np.random.choice([-1, 1])
         
     @property
     def pos_get(self):
@@ -14,6 +17,14 @@ class Mer():
     
     def pos_set(self, new_pos):
         self.__pos = new_pos
+        
+    @property
+    def spin_get(self):
+        spin = self.__spin
+        return spin
+    
+    def spin_set(self, new_spin):
+        self.__spin = new_spin
         
     @property
     def nei_get(self):
